@@ -7,35 +7,40 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-
-    <title>Listado de vehículos</title>
+    <title>Lista de Productos</title>
   </head>
   <body>
     <div class="container">
-        <h1>Listado de productos</h1>
         <div class="row">
-            <table class="table">
+          <fieldset class="border-primary">
+            <legend>Lista de Productos</legend>
+
+            <table class="table table-striped table-hover">
               <thead>
                 <tr>
-                  <th scope="col">Patente</th>
-                  <th scope="col">Marca</th>
-                  <th scope="col">Modelo</th>
-                  <th scope="col">Opciones</th>
+                  <th scope="col">SKU</th>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Precio</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Descripcion</th>
                 </tr>
               </thead>
                 <tbody>
-                  {% for ve in productos %}
+                  {% for producto in productos %}
                   <tr>
-                    <td>{{ve.patente}}</td>
-                    <td>{{ve.marca}}</td>
-                    <td>{{ve.modelo}}</td>
-                    <td><a href="{% url 'form_mod_producto' ve.patente %}">Modificar</a></td>
-                    <td><a href="{% url 'form_del_producto' ve.patente %}">Eliminar</a></td>
+                    <td>{{producto.sku}}</td>
+                    <td>{{producto.nombre}}</td>
+                    <td>{{producto.precio}}</td>
+                    <td>{{producto.stock}}</td>
+                    <td>{{producto.descripcion}}</td>
+                    <td><a href="{% url 'update' producto.sku %}">Modificar</a></td>
+                    <td><a href="{% url 'delete' producto.sku %}">Eliminar</a></td>
                   </tr>
                   {% endfor %}
                 </tbody>
             </table>
-            <a href="{% url 'form_producto' %}">Nuevo registro</a>
+            </fieldset>
+            <a href="{% url 'create' %}">Nuevo registro</a>
         </div>
     </div>
 

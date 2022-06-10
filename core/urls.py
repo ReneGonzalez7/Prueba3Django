@@ -1,9 +1,13 @@
+from signal import signal
 from django.urls import path
-from .views import home, form_producto, form_mod_producto, form_del_producto
+from .views import home, create, update, delete, SignUpView#, updateUser, deleteUser;
 
 urlpatterns = [
     path('', home, name="home"),
-    path('form-producto', form_producto, name="form_producto"),
-    path('form-mod-producto/<id>', form_mod_producto, name="form_mod_producto"),
-    path('form-del-producto/<id>', form_del_producto, name="form_del_producto"),
+    path('createUser', SignUpView.as_view(), name="createUser"),
+    #path('updateUser', updateUser, name="updateUser"),
+    #path('deleteUser', deleteUser, name="deleteUser"),
+    path('create', create, name="create"),
+    path('update/<id>', update, name="update"),
+    path('delete/<id>', delete, name="delete"),
 ]

@@ -3,6 +3,24 @@ from django.template import loader
 from .models import Producto
 from .forms import ProductoForm
 
+from django.contrib.auth import login
+
+from django.views.generic import CreateView
+
+from .models import Perfil
+
+from .forms import UsuarioForm
+
+
+class SignUpView(CreateView):
+    model = Perfil
+    form_class = UsuarioForm
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('/')
+
+
 # Create your views here.
 def home(request):
     productos = Producto.objects.all()
@@ -11,7 +29,7 @@ def home(request):
     }
     return render(request, 'core/home.html', datos)
 
-def form_producto(request):
+def create(request):
     datos = {
         'form': ProductoForm()
     }
@@ -21,10 +39,10 @@ def form_producto(request):
             formulario.save()
             datos['mensaje'] = "Datos guardados correctamente"
 
-    return render(request, 'core/form_producto.html', datos)
+    return render(request, 'core/create.html', datos)
 
-def form_mod_producto(request, id):
-    producto = Producto.objects.get(patente=id)
+def update(request, id):
+    producto = Producto.objects.get(sku=id)
     datos = {
         'form': ProductoForm(instance=producto)
     }
@@ -33,9 +51,9 @@ def form_mod_producto(request, id):
         if formulario.is_valid:
             formulario.save()
             datos['mensaje'] = "Modificados correctamente"
-    return render(request, 'core/form_mod_producto.html', datos)
+    return render(request, 'core/update.html', datos)
 
-def form_del_producto(request, id):
-    producto = Producto.objects.get(patente=id)
+def delete(request, id):
+    producto = Producto.objects.get(sku=id)
     producto.delete()
     return redirect(to="home")
