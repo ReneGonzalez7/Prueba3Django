@@ -14,3 +14,12 @@ def home(request):
         'productos': productos
     }
     return render(request, 'home.html', datos)
+
+
+def tienda(request, page):
+    productos = Producto.objects.all()
+    datos = {
+        'productos': productos[page*4-4:page*4],
+        'page':page
+    }
+    return render(request, 'tienda.html', datos)
