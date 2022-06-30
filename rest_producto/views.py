@@ -21,25 +21,25 @@ def lista_productos(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = ProductoSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        producto = ProductoSerializer(data=data)
+        if producto.is_valid():
+            producto.save()
+            return Response(producto.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(producto.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'UPDATE','PUT', 'DELETE'])
 @permission_classes((IsAuthenticated,))
 def detalle_producto(request, id):
     try:
-        producto = Producto.objects.get(patente=id)
+        producto = Producto.objects.get(sku=id)
     except Producto.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         serializer = ProductoSerializer(producto)
         return Response(serializer.data)
-    if request.method == 'PUT':
+    if request.method == 'UPDATE' or request.method == 'PUT':
         data = JSONParser().parse(request)
         serializer = ProductoSerializer(producto, data=data)
         if serializer.is_valid():

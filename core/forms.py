@@ -11,13 +11,13 @@ class ProductoForm(ModelForm):
         fields = ['sku', 'nombre', 'descripcion', 'precio', 'stock']
 
 class UsuarioForm(UserCreationForm):
-    name = forms.CharField(max_length=140, required=True)
+    username = forms.CharField(max_length=140, required=True)
     email = forms.EmailField(required=True)
 
     class Meta:
         model = User
         fields = (
-            'name',
+            'username',
             'email',
             'password1',
             'password2',

@@ -40,4 +40,4 @@ class Producto(models.Model):
     categoria = models.ForeignKey(Categoria,null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.patente
+        return self.sku
