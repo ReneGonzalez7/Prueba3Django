@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
-from core.models import Producto
-from .serializers import ProductoSerializer
+from core.models import Producto, Venta
+from .serializers import ProductoSerializer, VentaSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -28,6 +28,44 @@ def lista_productos(request):
         else:
             return Response(producto.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# API request GET POST
+@csrf_exempt
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
+def lista_ventas(request, id_usuario):
+    if request.method == 'GET':
+        #Filtrar por id usuario
+        venta = Venta.objects.all()
+        serializer = VentaSerializer(venta, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = VentaSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# API request GET POST
+@csrf_exempt
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
+def lista_compras(request, id_cliente):
+    if request.method == 'GET':
+        #Filtrar por id cliente
+        venta = Venta.objects.all()
+        serializer = VentaSerializer(venta, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = VentaSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'UPDATE','PUT', 'DELETE'])
 @permission_classes((IsAuthenticated,))
@@ -49,4 +87,27 @@ def detalle_producto(request, id):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         producto.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticated,))
+def detalle_venta(request, id):
+    try:
+        venta = Venta.objects.get(id=id)
+    except Venta.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.method == 'GET':
+        serializer = VentaSerializer(venta)
+        return Response(serializer.data)
+    if request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializer = VentaSerializer(venta, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        venta.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

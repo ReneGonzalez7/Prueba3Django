@@ -6,6 +6,7 @@ from django.dispatch import receiver
 
 class Perfil(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    isCliente = models.BooleanField(blank= True) #booleano que nos indica si es un cliente
     comentarios = models.CharField(max_length=255, blank=True)
 
     def __str__(self): 
@@ -41,3 +42,40 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.sku
+<<<<<<< HEAD
+=======
+
+
+# modelo para el descuent9
+class Descuento (models.Model):
+    id = models.IntegerField(primary_key=True)
+
+    def __str__(self):
+        return self.id
+
+# modelo para el despacho
+class Despacho (models.Model):
+    id = models.IntegerField(primary_key=True)
+
+    def __str__(self):
+        return self.id
+
+# modelo para la venta
+class Venta(models.Model):
+    id = models.IntegerField(primary_key=True)
+    total = models.IntegerField()
+    descuento = models.ForeignKey(Descuento,null=True, on_delete=models.CASCADE)
+    despacho = models.ForeignKey(Despacho,null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
+
+# modelo para la venta
+class DetalleVenta(models.Model):
+    id = models.IntegerField(primary_key=True)
+    producto = models.ForeignKey(Producto,null=True, on_delete=models.CASCADE)
+    venta = models.ForeignKey(Venta,null=True, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
+>>>>>>> 1a3caf7 (Ultimos arreglos)
