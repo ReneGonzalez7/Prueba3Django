@@ -42,8 +42,6 @@ class Producto(models.Model):
 
     def __str__(self):
         return self.sku
-<<<<<<< HEAD
-=======
 
 
 # modelo para el descuent9
@@ -78,4 +76,3 @@ class DetalleVenta(models.Model):
 
     def __str__(self):
         return self.id
->>>>>>> 1a3caf7 (Ultimos arreglos)

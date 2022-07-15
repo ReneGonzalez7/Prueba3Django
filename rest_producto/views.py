@@ -4,11 +4,29 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
-from core.models import Producto, Venta
-from .serializers import ProductoSerializer, VentaSerializer
+from core.models import Categoria, Producto, Venta
+from .serializers import CategoriaSerializer, ProductoSerializer, VentaSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+
+# API request GET POST
+@csrf_exempt
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticated,))
+def lista_categorias(request):
+    if request.method == 'GET':
+        categoria = Categoria.objects.all()
+        serializer = CategoriaSerializer(categoria, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = CategoriaSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # API request GET POST
 @csrf_exempt
@@ -21,12 +39,12 @@ def lista_productos(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        producto = ProductoSerializer(data=data)
-        if producto.is_valid():
-            producto.save()
-            return Response(producto.data, status=status.HTTP_201_CREATED)
+        serializer = ProductoSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(producto.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # API request GET POST
 @csrf_exempt
@@ -40,6 +58,7 @@ def lista_ventas(request, id_usuario):
         return Response(serializer.data)
     elif request.method == 'POST':
         data = JSONParser().parse(request)
+        #Editar stock del producto
         serializer = VentaSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
@@ -67,7 +86,7 @@ def lista_compras(request, id_cliente):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET', 'UPDATE','PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes((IsAuthenticated,))
 def detalle_producto(request, id):
     try:
@@ -77,7 +96,7 @@ def detalle_producto(request, id):
     if request.method == 'GET':
         serializer = ProductoSerializer(producto)
         return Response(serializer.data)
-    if request.method == 'UPDATE' or request.method == 'PUT':
+    if request.method == 'PUT':
         data = JSONParser().parse(request)
         serializer = ProductoSerializer(producto, data=data)
         if serializer.is_valid():
