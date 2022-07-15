@@ -47,6 +47,7 @@ class Producto(models.Model):
 # modelo para el descuent9
 class Descuento (models.Model):
     id = models.IntegerField(primary_key=True)
+    #monto
 
     def __str__(self):
         return self.id
@@ -54,6 +55,7 @@ class Descuento (models.Model):
 # modelo para el despacho
 class Despacho (models.Model):
     id = models.IntegerField(primary_key=True)
+    #fecha
 
     def __str__(self):
         return self.id
@@ -73,6 +75,7 @@ class DetalleVenta(models.Model):
     id = models.IntegerField(primary_key=True)
     producto = models.ForeignKey(Producto,null=True, on_delete=models.CASCADE)
     venta = models.ForeignKey(Venta,null=True, on_delete=models.CASCADE)
+    #cantidad
 
     def __str__(self):
         return self.id

@@ -58,7 +58,7 @@ def lista_ventas(request, id_usuario):
         return Response(serializer.data)
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        #Editar stock del producto
+        #TODO: Editar stock del producto
         serializer = VentaSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
